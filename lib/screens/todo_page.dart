@@ -78,7 +78,15 @@ class TodoPage extends StatelessWidget {
                   final todos = todoProvider.todos;
                   if (todos.isEmpty) {
                     return const Center(
-                      child: Text('No tasks available'),
+                      child: Text(
+                        'No To-Do available',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: ColorValues.purple
+                        ),
+                      ),
                     );
                   }
                   return ListView.builder(
