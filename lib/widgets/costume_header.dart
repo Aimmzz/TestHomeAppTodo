@@ -25,11 +25,21 @@ class CostumeHeader extends StatelessWidget {
             width: 235,
           ),
           const Text(
-            'Halaman Login',
+            'MyToDo',
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 24,
               fontWeight: FontWeight.bold,
+              color: Colors.white
+            ),
+          ),
+          const SizedBox(height: 10,),
+          const Text(
+            'Gunakan untuk mengatur To-Do anda!',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
               color: Colors.white
             ),
           ),

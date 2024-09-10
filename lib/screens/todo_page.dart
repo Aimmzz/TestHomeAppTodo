@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:home_test_flutter/commons/color.dart';
 import 'package:home_test_flutter/providers/todo_providers.dart';
 import 'package:home_test_flutter/screens/add_todo_page.dart';
+import 'package:home_test_flutter/widgets/card_todo.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
 class TodoPage extends StatelessWidget {
   const TodoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final searchController = TextEditingController();
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('To-Do List'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text(
+          'To - Do List',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: Colors.white
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: ColorValues.purplePastel,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -19,14 +36,19 @@ class TodoPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
+              controller: searchController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
                 prefixIcon: const Icon(Icons.search),
-                hintText: 'Search tasks...',
+                hintText: 'Search to do...',
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               ),
+              onChanged: (query) {
+                Provider.of<TodoProvider>(context, listen: false)
+                    .setSearchQuery(query);
+              },
             ),
             const SizedBox(height: 16),
             Consumer<TodoProvider>(
@@ -35,7 +57,7 @@ class TodoPage extends StatelessWidget {
                   value: todoProvider.selectedFilter,
                   icon: const Icon(Icons.filter_list),
                   isExpanded: true,
-                  items: <String>['Semua', 'Belum', 'Selesai'].map((String value) {
+                  items: <String>['Semua', 'Belum Selesai', 'Selesai'].map((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
                       child: Text(value),
@@ -54,32 +76,23 @@ class TodoPage extends StatelessWidget {
               child: Consumer<TodoProvider>(
                 builder: (context, todoProvider, child) {
                   final todos = todoProvider.todos;
-
                   if (todos.isEmpty) {
                     return const Center(
                       child: Text('No tasks available'),
                     );
                   }
-
                   return ListView.builder(
                     itemCount: todos.length,
                     itemBuilder: (context, index) {
                       final task = todos[index];
-                      return Card(
-                        elevation: 4,
-                        margin: const EdgeInsets.only(bottom: 16),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.all(16),
-                          leading: Checkbox(
-                            value: task.type == 2,
-                            onChanged: (bool? value) {
-                              todoProvider.updateTodoStatus(task, value ?? false);
-                            },
-                          ),
-                          title: Text(task.name),
-                          subtitle: Text(
-                              'Due date: ${DateFormat('yyyy-MM-dd').format(task.dueDate)}'),
-                        ),
+                      return TodoCard(
+                        task: task,
+                        onCheckboxChanged: (bool? value) {
+                          todoProvider.updateTodoStatus(task, value ?? false);
+                        },
+                        onDelete: () {
+                          todoProvider.deleteTodo(task.id);
+                        },
                       );
                     },
                   );
@@ -90,19 +103,22 @@ class TodoPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: ColorValues.purple,
         onPressed: () {
           showDialog(
             context: context,
             builder: (context) => const AddTodoPage(),
           ).then((_) {
-            // Muat ulang data to-do setelah dialog ditutup
             Provider.of<TodoProvider>(context, listen: false).loadTodos(
               Provider.of<TodoProvider>(context, listen: false).selectedFilter
             );
           });
         },
         tooltip: 'Add Task',
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }

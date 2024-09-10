@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home_test_flutter/commons/color.dart';
 import 'package:home_test_flutter/providers/add_todo_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -23,8 +24,9 @@ class AddTodoPage extends StatelessWidget {
                 children: [
                   const Center(
                     child: Text(
-                      'Add To-Do',
+                      'Add To - Do',
                       style: TextStyle(
+                        fontFamily: 'Poppins',
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -35,7 +37,13 @@ class AddTodoPage extends StatelessWidget {
                   TextField(
                     controller: provider.descriptionController,
                     decoration: InputDecoration(
-                      labelText: 'Task Description',
+                      labelText: 'To-Do Description',
+                      labelStyle: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: ColorValues.darkGrey
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -46,6 +54,12 @@ class AddTodoPage extends StatelessWidget {
                     controller: provider.dueDateController,
                     decoration: InputDecoration(
                       labelText: 'Due Date',
+                      labelStyle: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: ColorValues.darkGrey
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -61,8 +75,23 @@ class AddTodoPage extends StatelessWidget {
 
                   Center(
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: ColorValues.purple,
+                        fixedSize: Size(MediaQuery.of(context).size.width * 0.8, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
                       onPressed: () => provider.saveTodo(context),
-                      child: const Text('Save To-Do'),
+                      child: const Text(
+                        'Save To-Do',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white
+                        ),
+                      ),
                     ),
                   ),
                 ],
